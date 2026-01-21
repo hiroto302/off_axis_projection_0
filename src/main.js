@@ -68,6 +68,55 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+
+// Video (WebCamera) Setup
+const videoElement = document.getElementById('video');
+let videoStream;
+
+const videoConfig = {
+    width: 640,
+    height: 480,
+    facingMode: 'user', // 'user' for front camera, 'environment' for back camera
+    frameRate: 30
+}
+
+const videoConstraints = {
+    video: {
+        width: videoConfig.width,
+        height: videoConfig.height,
+        facingMode: videoConfig.facingMode,
+        frameRate: videoConfig.frameRate
+    },
+    audio: false
+}
+
+navigator.mediaDevices.getUserMedia(videoConstraints)
+    .then((stream) => {
+        videoStream = stream;
+        videoElement.srcObject = stream;
+
+        return new Promise((resolve) => {
+            videoElement.onloadedmetadata = () => {
+                console.log('✅ Video metadata loaded');
+                console.log(`Resolution: ${videoElement.videoWidth}x${videoElement.videoHeight}`);
+                resolve();
+            };
+        });
+    })
+    .then(() => {
+        return videoElement.play();
+    })
+    .then(() => {
+        console.log('✅ Video playback started');
+        toggleVideoPreview(true);
+    })
+    .catch((error) => {
+        console.error('Error accessing media devices.', error);
+    });
+
+
+
+
 // Animate
 const clock = new THREE.Clock()
 
