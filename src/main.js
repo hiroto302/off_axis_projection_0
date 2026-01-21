@@ -7,15 +7,32 @@ const canvas = document.querySelector('#webgl')
 const scene = new THREE.Scene()
 
 // Object
-// Cube
-const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
-const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+// Cube with Edges
+const geometryCube = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
+const materialCube = new THREE.MeshStandardMaterial({ color: 0x4488ff, wireframe: false })
+const cube = new THREE.Mesh(geometryCube, materialCube)
+scene.add(cube)
+const edges = new THREE.EdgesGeometry(geometryCube)
+const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 }))
+cube.add(line)
+
 // Grid Stage
 const gridHelper = new THREE.GridHelper(20, 20, 0xff8844, 0xdd6633)
 gridHelper.position.y = - 2
 scene.add(gridHelper)
+
+// Lights
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+scene.add(ambientLight)
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0)
+directionalLight.position.set(5, 10, 7.5)
+scene.add(directionalLight)
+
+const pointLight = new THREE.PointLight(0xff69b4, 5.0)
+pointLight.position.set(-1, -1, -1)
+scene.add(pointLight)
+
 
 // Sizes
 const sizes = {
@@ -59,8 +76,8 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-    mesh.rotation.y = 0.5 * elapsedTime
-    mesh.rotation.x = 0.2 * elapsedTime
+    cube.rotation.y = 0.5 * elapsedTime
+    cube.rotation.x = 0.2 * elapsedTime
 
     // Render
     renderer.render(scene, camera)
