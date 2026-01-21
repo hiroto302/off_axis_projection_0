@@ -7,10 +7,15 @@ const canvas = document.querySelector('#webgl')
 const scene = new THREE.Scene()
 
 // Object
+// Cube
 const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
+// Grid Stage
+const gridHelper = new THREE.GridHelper(20, 20, 0xff8844, 0xdd6633)
+gridHelper.position.y = - 2
+scene.add(gridHelper)
 
 // Sizes
 const sizes = {
@@ -65,3 +70,7 @@ const tick = () =>
 }
 
 tick()
+
+setTimeout(() => {
+    toggleLoadingScreen(false);
+}, 500);

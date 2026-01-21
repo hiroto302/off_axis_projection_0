@@ -1,19 +1,253 @@
-*
-{
-  margin: 20;
-  padding: 20;
+/* Off-Axis Projection Tutorial - Shared Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body
-{
-  background: red;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0a0a1e;
+  color: #ffffff;
   overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 }
 
-.webgl
-{
+/* Loading Screen */
+#loading-screen {
   position: fixed;
-  top: 10;
-  left: 10;
-  outline: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 30, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#loading-screen.hidden {
+  display: none;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top: 5px solid #ff8844;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#loading-text {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #ff8844;
+}
+
+/* Three.js Canvas */
+#three-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+/* Video Element (webcam feed) */
+#video {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  height: 240px;
+  border: 2px solid #ff8844;
+  border-radius: 8px;
+  transform: scaleX(-1); /* Mirror for natural UX */
+  z-index: 100;
+  display: none; /* Hidden by default, shown via Debug UI */
+}
+
+#video.visible {
+  display: block;
+}
+
+/* Canvas Overlay for landmarks/bounding boxes */
+#overlay-canvas {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  height: 240px;
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  z-index: 101;
+  display: none; /* Shown in Phase 3+ */
+  pointer-events: none;
+}
+
+#overlay-canvas.visible {
+  display: block;
+}
+
+/* Warning Banner (face not detected) */
+#warning-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 200, 0, 0.9);
+  color: #000;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 200;
+  display: none; /* Shown when face not detected */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#warning-banner.visible {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Info Panel (top-left) */
+#info-panel {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid #ff8844;
+  z-index: 200;
+  max-width: 300px;
+}
+
+#info-panel h3 {
+  color: #ff8844;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+#phase-name {
+  color: #00ffff;
+}
+
+#phase-description {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+#debug-info {
+  font-size: 12px;
+  color: #aaa;
+  font-family: 'Courier New', monospace;
+}
+
+#debug-info p {
+  margin: 4px 0;
+}
+
+/* lil-gui overrides (if used) */
+.lil-gui {
+  --width: 320px;
+  --background-color: rgba(0, 0, 0, 0.85);
+  --widget-color: rgba(255, 136, 68, 0.3);
+  --hover-color: rgba(255, 136, 68, 0.5);
+  --focus-color: rgba(0, 255, 255, 0.5);
+  --number-color: #00ffff;
+  --string-color: #ff8844;
+  z-index: 300;
+}
+
+/* Stats.js positioning (top-right) */
+.stats {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  z-index: 300;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #info-panel {
+    font-size: 12px;
+    padding: 10px 15px;
+    max-width: 200px;
+  }
+
+  #video, #overlay-canvas {
+    width: 160px;
+    height: 120px;
+  }
+
+  #warning-banner {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
+
+/* Error message overlay */
+.error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+  padding: 20px;
+}
+
+.error-overlay h2 {
+  color: #ff4444;
+  margin-bottom: 15px;
+}
+
+.error-overlay p {
+  color: #ccc;
+  text-align: center;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.error-overlay button {
+  margin-top: 20px;
+  padding: 10px 30px;
+  background-color: #ff8844;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.error-overlay button:hover {
+  background-color: #ff6622;
 }
