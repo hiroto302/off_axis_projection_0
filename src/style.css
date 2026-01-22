@@ -92,6 +92,7 @@ body {
   height: 240px;
   border: 2px solid #00ffff;
   border-radius: 8px;
+  transform: scaleX(-1); /* Mirror to match video */
   z-index: 101;
   display: none; /* Shown in Phase 3+ */
   pointer-events: none;
